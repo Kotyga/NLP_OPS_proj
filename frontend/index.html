@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Три кадра — фильмы и отзывы</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --background: #ffffff;
+      --surface: #ffffff;
+      --surface-soft: #f8f6f4;
+      --primary: #71384d;
+      --primary-hover: #5d2c3e;
+      --primary-soft: #f5ebef;
+      --text: #252126;
+      --muted: #746d72;
+      --border: #e7e1e3;
+      --star: #c18423;
+      --shadow: 0 14px 35px rgba(64, 44, 51, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    .site-header {
+      width: 100%;
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .header-inner {
+      width: min(1120px, calc(100% - 32px));
+      min-height: 76px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .header-caption {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 14px;
+    }
+
+    main {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 52px 0 64px;
+      flex: 1;
+    }
+
+    .hero {
+      max-width: 720px;
+      margin-bottom: 32px;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 12px;
+      font-size: clamp(32px, 5vw, 48px);
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 26px;
+      letter-spacing: -0.03em;
+    }
+
+    .lead {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .form-card {
+      display: grid;
+      gap: 18px;
+      margin-bottom: 48px;
+      padding: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 18px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    label {
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 12px 14px;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 110px;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #aaa2a7;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(113, 56, 77, 0.12);
+    }
+
+    button {
+      justify-self: start;
+      min-width: 150px;
+      padding: 12px 20px;
+      color: #ffffff;
+      background: var(--primary);
+      border: 1px solid var(--primary);
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.2s, border-color 0.2s, transform 0.2s;
+    }
+
+    button:hover {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      cursor: wait;
+      opacity: 0.65;
+      transform: none;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .section-heading h2 {
+      margin-bottom: 0;
+    }
+
+    .section-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 18px;
+    }
+
+    .movie-card {
+      min-height: 240px;
+      padding: 22px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .movie-card h3 {
+      margin-bottom: 10px;
+      font-size: 20px;
+      line-height: 1.35;
+      letter-spacing: -0.02em;
+    }
+
+    .movie-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .price {
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    .rating {
+      color: var(--star);
+      font-size: 17px;
+      letter-spacing: 2px;
+      white-space: nowrap;
+    }
+
+    .description {
+      margin-bottom: 20px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+      overflow-wrap: anywhere;
+    }
+
+    .card-link {
+      margin-top: auto;
+      color: var(--primary);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .card-link:hover {
+      color: var(--primary-hover);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      padding: 34px;
+      color: var(--muted);
+      text-align: center;
+      background: var(--surface-soft);
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+    }
+
+    .site-footer {
+      padding: 24px 16px;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 14px;
+    }
+
+    @media (max-width: 700px) {
+      .header-inner {
+        min-height: 68px;
+      }
+
+      .header-caption {
+        display: none;
+      }
+
+      main {
+        padding-top: 36px;
+      }
+
+      .form-card {
+        padding: 20px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html">Три кадра</a>
+      <p class="header-caption">Кино, мнения и честные три звезды</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Добавьте фильм</h1>
+      <p class="lead">Создайте карточку фильма, укажите стоимость билета и собирайте отзывы зрителей по трёхбалльной шкале.</p>
+    </section>
+
+    <form id="product-form" class="form-card">
+      <div class="field">
+        <label for="name">Название фильма</label>
+        <input id="name" name="name" required maxlength="200" placeholder="Например, Интерстеллар">
+      </div>
+
+      <div class="field">
+        <label for="description">Описание</label>
+        <textarea id="description" name="description" rows="4" maxlength="2000" placeholder="Коротко о сюжете и атмосфере фильма"></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="price">Стоимость билета, ₽</label>
+          <input id="price" name="price" type="number" step="0.01" min="0" required placeholder="450.00">
+        </div>
+      </div>
+
+      <button id="submit-button" type="submit">Добавить фильм</button>
+    </form>
+
+    <section>
+      <div class="section-heading">
+        <h2>Фильмы</h2>
+        <p class="section-note">Оценка зрителей — от 1 до 3 звёзд</p>
+      </div>
+      <div id="products" class="grid" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    © 2026 Котыга Майя. Все права защищены.
+  </footer>
+
+  <script>
+    const API_BASE = window.location.protocol.startsWith('http')
+      ? `${window.location.protocol}//${window.location.hostname}:8000`
+      : 'http://localhost:8000';
+
+    const productsContainer = document.getElementById('products');
+    const productForm = document.getElementById('product-form');
+    const submitButton = document.getElementById('submit-button');
+
+    function formatPrice(value) {
+      return new Intl.NumberFormat('ru-RU', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+      }).format(Number(value));
+    }
+
+    function createRating(rating) {
+      const value = Math.max(0, Math.min(3, Math.round(Number(rating) || 0)));
+      const element = document.createElement('span');
+      element.className = 'rating';
+      element.textContent = `${'★'.repeat(value)}${'☆'.repeat(3 - value)}`;
+      element.setAttribute('aria-label', `Оценка: ${value} из 3`);
+      return element;
+    }
+
+    function createMovieCard(movie) {
+      const article = document.createElement('article');
+      article.className = 'movie-card';
+
+      const title = document.createElement('h3');
+      title.textContent = movie.name;
+
+      const meta = document.createElement('div');
+      meta.className = 'movie-meta';
+
+      const price = document.createElement('span');
+      price.className = 'price';
+      price.textContent = `${formatPrice(movie.price)} ₽`;
+
+      const reviews = Array.isArray(movie.reviews) ? movie.reviews : [];
+      const ratings = reviews
+        .map(review => Number(review.rating))
+        .filter(rating => rating >= 1 && rating <= 3);
+      const averageRating = ratings.length
+        ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length
+        : Number(movie.rating || 0);
+
+      meta.append(price, createRating(averageRating));
+
+      const description = document.createElement('p');
+      description.className = 'description';
+      description.textContent = movie.description || 'Описание не указано';
+
+      const link = document.createElement('a');
+      link.className = 'card-link';
+      link.href = `product.html?id=${encodeURIComponent(movie.id)}`;
+      link.textContent = 'Отзывы о фильме →';
+
+      article.append(title, meta, description, link);
+      return article;
+    }
+
+    function showProductsMessage(message) {
+      productsContainer.replaceChildren();
+      const element = document.createElement('div');
+      element.className = 'empty-state';
+      element.textContent = message;
+      productsContainer.appendChild(element);
+    }
+
+    async function loadProducts() {
+      showProductsMessage('Загружаем фильмы...');
+
+      try {
+        const response = await fetch(`${API_BASE}/products`);
+
+        if (!response.ok) {
+          throw new Error('Не удалось загрузить фильмы');
+        }
+
+        const products = await response.json();
+        productsContainer.replaceChildren();
+
+        if (!Array.isArray(products) || products.length === 0) {
+          showProductsMessage('Пока нет фильмов. Добавьте первый фильм в каталог.');
+          return;
+        }
+
+        products.forEach(product => {
+          productsContainer.appendChild(createMovieCard(product));
+        });
+      } catch {
+        showProductsMessage('Не удалось загрузить список фильмов.');
+      }
+    }
+
+    productForm.addEventListener('submit', async event => {
+      event.preventDefault();
+
+      const formData = new FormData(productForm);
+      const payload = Object.fromEntries(formData.entries());
+      payload.price = Number(payload.price);
+
+      submitButton.disabled = true;
+      submitButton.textContent = 'Добавляем...';
+
+      try {
+        const response = await fetch(`${API_BASE}/products`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          throw new Error('Не удалось создать фильм');
+        }
+
+        productForm.reset();
+        await loadProducts();
+      } catch {
+        alert('Не удалось добавить фильм');
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Добавить фильм';
+      }
+    });
+
+    loadProducts();
+  </script>
+</body>
+</html>

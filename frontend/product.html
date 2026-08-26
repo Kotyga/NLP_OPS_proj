@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Три кадра — карточка фильма</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --background: #ffffff;
+      --surface: #ffffff;
+      --surface-soft: #f8f6f4;
+      --primary: #71384d;
+      --primary-hover: #5d2c3e;
+      --text: #252126;
+      --muted: #746d72;
+      --border: #e7e1e3;
+      --star: #b7791f;
+      --shadow: 0 14px 35px rgba(64, 44, 51, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    .site-header {
+      width: 100%;
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .header-inner {
+      width: min(960px, calc(100% - 32px));
+      min-height: 76px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .header-caption {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 14px;
+    }
+
+    main {
+      width: min(960px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 38px 0 64px;
+      flex: 1;
+    }
+
+    .back {
+      display: inline-flex;
+      margin-bottom: 22px;
+      color: var(--primary);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .back:hover {
+      color: var(--primary-hover);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .layout {
+      display: grid;
+      gap: 20px;
+    }
+
+    .card {
+      padding: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 14px;
+      font-size: clamp(30px, 5vw, 44px);
+      line-height: 1.15;
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 25px;
+      letter-spacing: -0.03em;
+    }
+
+    h3 {
+      margin-bottom: 8px;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+
+    .description {
+      max-width: 760px;
+      margin-bottom: 20px;
+      color: var(--muted);
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+
+    .movie-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px 20px;
+    }
+
+    .price {
+      color: var(--primary);
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .rating-summary {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .rating {
+      color: var(--star);
+      font-size: 20px;
+      letter-spacing: 3px;
+      white-space: nowrap;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .reviews {
+      display: grid;
+      gap: 12px;
+    }
+
+    .review {
+      padding: 18px;
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .review-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+
+    .review-author {
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .review-rating {
+      color: var(--star);
+      font-size: 17px;
+      letter-spacing: 2px;
+      white-space: nowrap;
+    }
+
+    .rating-pending {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .review-text {
+      margin: 0;
+      color: #4b4549;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .empty-state {
+      padding: 24px;
+      color: var(--muted);
+      text-align: center;
+      background: var(--surface-soft);
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+    }
+
+    form {
+      display: grid;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    label {
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 12px 14px;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #aaa2a7;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(113, 56, 77, 0.12);
+    }
+
+    button {
+      justify-self: start;
+      min-width: 170px;
+      padding: 12px 20px;
+      color: #ffffff;
+      background: var(--primary);
+      border: 1px solid var(--primary);
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.2s, border-color 0.2s, transform 0.2s;
+    }
+
+    button:hover {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      cursor: wait;
+      opacity: 0.65;
+      transform: none;
+    }
+
+    .site-footer {
+      padding: 24px 16px;
+      color: var(--muted);
+      background: var(--surface-soft);
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .header-inner {
+        min-height: 68px;
+      }
+
+      .header-caption {
+        display: none;
+      }
+
+      main {
+        padding-top: 28px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .review-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html">Три кадра</a>
+      <p class="header-caption">Кино, мнения и честные три звезды</p>
+    </div>
+  </header>
+
+  <main>
+    <a class="back" href="index.html">← К списку фильмов</a>
+
+    <div class="layout">
+      <section class="card">
+        <h1 id="name">Загрузка...</h1>
+        <p id="description" class="description"></p>
+        <div class="movie-meta">
+          <span id="price" class="price"></span>
+          <div id="rating-summary" class="rating-summary"></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Отзывы зрителей</h2>
+        <div id="reviews" class="reviews" aria-live="polite"></div>
+      </section>
+
+      <section class="card">
+        <h3>Оставить отзыв</h3>
+        <p class="muted">Поделитесь впечатлениями, а модель оценит отзыв по трёхбалльной шкале.</p>
+
+        <form id="review-form">
+          <div class="field">
+            <label for="author">Автор</label>
+            <input id="author" name="author" maxlength="100" autocomplete="name" placeholder="Ваше имя">
+          </div>
+
+          <div class="field">
+            <label for="text">Текст отзыва</label>
+            <textarea id="text" name="text" rows="4" maxlength="3000" required placeholder="Расскажите, что понравилось или не понравилось"></textarea>
+          </div>
+
+          <button id="submit-button" type="submit">Отправить отзыв</button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    © 2026 Котыга Майя. Все права защищены.
+  </footer>
+
+  <script>
+    const API_BASE = window.location.protocol.startsWith('http')
+      ? `${window.location.protocol}//${window.location.hostname}:8000`
+      : 'http://localhost:8000';
+
+    const productId = new URLSearchParams(window.location.search).get('id');
+    const reviewsContainer = document.getElementById('reviews');
+    const reviewForm = document.getElementById('review-form');
+    const submitButton = document.getElementById('submit-button');
+
+    function formatPrice(value) {
+      const price = Number(value);
+
+      if (!Number.isFinite(price)) {
+        return '0';
+      }
+
+      return new Intl.NumberFormat('ru-RU', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+      }).format(price);
+    }
+
+    function normalizeRating(rating) {
+      const value = Number(rating);
+
+      if (!Number.isFinite(value) || value < 1 || value > 3) {
+        return null;
+      }
+
+      return value;
+    }
+
+    function getStars(rating) {
+      const value = Math.max(1, Math.min(3, Math.round(rating)));
+      return `${'★'.repeat(value)}${'☆'.repeat(3 - value)}`;
+    }
+
+    function createReview(review) {
+      const article = document.createElement('article');
+      article.className = 'review';
+
+      const header = document.createElement('div');
+      header.className = 'review-header';
+
+      const author = document.createElement('span');
+      author.className = 'review-author';
+      author.textContent = review.author || 'Аноним';
+
+      const ratingValue = normalizeRating(review.rating);
+      const rating = document.createElement('span');
+
+      if (ratingValue === null) {
+        rating.className = 'rating-pending';
+        rating.textContent = 'Ожидает оценки модели';
+      } else {
+        rating.className = 'review-rating';
+        rating.textContent = getStars(ratingValue);
+        rating.setAttribute(
+          'aria-label',
+          `Оценка модели: ${ratingValue} из 3`
+        );
+        rating.title = `Оценка модели: ${ratingValue} из 3`;
+      }
+
+      const text = document.createElement('p');
+      text.className = 'review-text';
+      text.textContent = review.text;
+
+      header.append(author, rating);
+      article.append(header, text);
+
+      return article;
+    }
+
+    function renderRatingSummary(reviews) {
+      const container = document.getElementById('rating-summary');
+      container.replaceChildren();
+
+      const ratings = reviews
+        .map(review => normalizeRating(review.rating))
+        .filter(rating => rating !== null);
+
+      const stars = document.createElement('span');
+      stars.className = 'rating';
+
+      const caption = document.createElement('span');
+      caption.className = 'muted';
+
+      if (ratings.length === 0) {
+        stars.textContent = '☆☆☆';
+        stars.setAttribute('aria-label', 'Оценок пока нет');
+        caption.textContent = 'Оценок модели пока нет';
+      } else {
+        const average = ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length;
+        stars.textContent = getStars(average);
+        stars.setAttribute(
+          'aria-label',
+          `Средняя оценка: ${average.toFixed(1)} из 3`
+        );
+        caption.textContent = `${average.toFixed(1)} из 3 · ${ratings.length} оценок`;
+      }
+
+      container.append(stars, caption);
+    }
+
+    function showReviewsMessage(message) {
+      reviewsContainer.replaceChildren();
+
+      const element = document.createElement('div');
+      element.className = 'empty-state';
+      element.textContent = message;
+
+      reviewsContainer.appendChild(element);
+    }
+
+    function showProductError(title, description) {
+      document.getElementById('name').textContent = title;
+      document.getElementById('description').textContent = description;
+      document.getElementById('price').textContent = '';
+      document.getElementById('rating-summary').replaceChildren();
+      reviewForm.hidden = true;
+    }
+
+    async function loadProduct() {
+      if (!productId) {
+        showProductError(
+          'Фильм не найден',
+          'В адресе страницы отсутствует идентификатор фильма.'
+        );
+        showReviewsMessage('Невозможно загрузить отзывы.');
+        return;
+      }
+
+      showReviewsMessage('Загружаем отзывы...');
+
+      try {
+        const response = await fetch(
+          `${API_BASE}/products/${encodeURIComponent(productId)}`
+        );
+
+        if (!response.ok) {
+          throw new Error('Фильм не найден');
+        }
+
+        const product = await response.json();
+        const reviews = Array.isArray(product.reviews) ? product.reviews : [];
+
+        document.title = `${product.name} — Три кадра`;
+        document.getElementById('name').textContent = product.name;
+        document.getElementById('description').textContent =
+          product.description || 'Описание не указано';
+        document.getElementById('price').textContent =
+          `Билет от ${formatPrice(product.price)} ₽`;
+
+        renderRatingSummary(reviews);
+        reviewsContainer.replaceChildren();
+
+        if (reviews.length === 0) {
+          showReviewsMessage(
+            'Опубликованных отзывов пока нет. Станьте первым зрителем.'
+          );
+          return;
+        }
+
+        reviews.forEach(review => {
+          reviewsContainer.appendChild(createReview(review));
+        });
+      } catch {
+        showProductError(
+          'Фильм не найден',
+          'Не удалось загрузить карточку фильма.'
+        );
+        showReviewsMessage('Не удалось загрузить отзывы.');
+      }
+    }
+
+    reviewForm.addEventListener('submit', async event => {
+      event.preventDefault();
+
+      if (!productId) {
+        alert('Не указан идентификатор фильма');
+        return;
+      }
+
+      const formData = new FormData(reviewForm);
+      const payload = Object.fromEntries(formData.entries());
+
+      payload.author = payload.author.trim();
+      payload.text = payload.text.trim();
+      payload.product_id = productId;
+
+      if (!payload.text) {
+        alert('Введите текст отзыва');
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitButton.textContent = 'Модель оценивает...';
+
+      try {
+        const response = await fetch(`${API_BASE}/reviews/publish`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          throw new Error('Не удалось отправить отзыв');
+        }
+
+        reviewForm.reset();
+        await loadProduct();
+      } catch {
+        alert('Не удалось отправить отзыв');
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Отправить отзыв';
+      }
+    });
+
+    loadProduct();
+  </script>
+</body>
+</html>
