@@ -124,7 +124,7 @@ moderation_reason = причина отклонения
 
 ## Схема обработки
 
-![schema][https://github.com/Kotyga/NLP_OPS_proj/blob/main/src/schema.png]
+![schema](https://raw.githubusercontent.com/Kotyga/NLP_OPS_proj/main/src/schema.png)
 
 ## Схема базы данных
 
